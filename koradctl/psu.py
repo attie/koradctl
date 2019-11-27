@@ -26,7 +26,7 @@ class PowerSupply:
         self.port.write(command)
         response = self.port.read(max_response_size)
 
-        return response
+        return response.rstrip(b'\x00')
 
 
     """
