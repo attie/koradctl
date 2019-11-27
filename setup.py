@@ -1,28 +1,20 @@
 #!/usr/bin/env python
 
 from setuptools import setup
+from m2r import convert
 
 import koradctl as me
 from koradctl.psu import tested_firmware
 
-long_description = '\n'.join((
-    'koradctl is a simple command line utility and python library for '
-    'controlling Korad / Tenma power supplies via their RS232 or USB '
-    'interfaces.',
-    '',
-    'koradctl has been tested with bench power supplies that respond '
-    'with the following firmware identification:',
-    *[ '  - %s' % _ for _ in tested_firmware ],
-    '',
-    'Other supplies listed on the following page should also work:',
-    '  https://sigrok.org/wiki/Korad_KAxxxxP_series',
-))
+with open('./README.md', 'r', encoding='utf-8') as f:
+    long_description = convert(f.read())
 
 setup(
     name=me.__proj_name__,
     version=me.__version__,
     description='Control utility for Korad / Tenma power supplies',
     long_description=long_description,
+    long_description_content_type='text/x-rst',
     author='Attie Grande',
     author_email='attie@attie.co.uk',
     url='https://github.com/attie/koradctl',

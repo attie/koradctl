@@ -1,9 +1,12 @@
-# Korad Control
+# `koradctl` - Power Supply Control Utility and Library
 
-A simple python library to support the control and automation of Korad KAxxxxP series power supplies.
-These supplies are also rebadged as other brands including Tenma and Vellerman.
+`koradctl` is a simple python library to support the control and automation of Korad KAxxxxP series power supplies.
+These supplies are also rebadged as other brands including Tenma and Vellerman (see [here](https://sigrok.org/wiki/Korad_KAxxxxP_series) for a more complete list).
 
-- [Command Reference](https://sigrok.org/wiki/Korad_KAxxxxP_series)
+`koradctl` has been tested with bench power supplies that respond with the following firmware identification.
+Please let me know if you have successfully used `koradctl` with other power supplies.
+
+- `TENMA 72-2540 V2.1`
 
 ## Install
 
@@ -22,6 +25,9 @@ koradctl -v 12 -i 0.4 -e on -M -f 10
 
 # 3.3v, 250mA, OCP on, OVP off, Output on, Monitor once
 koradctl --ocp on --ovp off -v 3.3 -i 0.25 -e on -m
+
+# further usage information:
+koradctl --help
 ```
 
 ## Power Supply API
