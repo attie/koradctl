@@ -16,11 +16,12 @@ pip install -r requirements.txt
 ## Usage
 
 ```bash
+# Output off
+python3 -m koradctl -e off
+
 # 12v, 400mA, Output on, Monitor with readings once every 10 seconds
 python3 -m koradctl -v 12 -i 0.4 -e on -M -f 10
 
-# Output off
-python3 -m koradctl -e off
 ```
 
 ## Power Supply API
