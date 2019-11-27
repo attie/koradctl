@@ -5,11 +5,32 @@ from koradctl.port import get_port
 from koradctl.psu import PowerSupply
 
 """
-basic example script
-- set the output to 12v
-- set the current limit to 0.5v
+more complex example script
+try connecting a resistive load, for example 2.5 Ohms and watch the output
+try connecting a device with a SMPS (that can handle the voltage) and watch the output
+
+steps:
+- set the output to V_START
+- set the current limit to 2A
 - enable over-current protection after 250ms
+- adjust the voltage setpoint by V_STEP, every 250ms, aiming for V_END
 """
+
+V_START = 0
+V_END = 12
+V_STEP = 0.5
+
+def get_next_voltage(v_live):
+    if v_live == V_END:
+        raise StopIteration()
+
+    if v_live < V_END:
+        v_next = v_live + V_STEP
+    elif v_live > V_END:
+        v_next = v_live - V_STEP
+    else:
+        v_next = None
+    return v_next
 
 port = get_port('/dev/ttyACM0')
 psu = PowerSupply(port)
@@ -19,8 +40,8 @@ psu.set_ocp_state(False)
 psu.set_ovp_state(False)
 
 # setup output
-psu.set_voltage_setpoint(12)
-psu.set_current_setpoint(0.5)
+psu.set_voltage_setpoint(V_START)
+psu.set_current_setpoint(2)
 
 # enable output
 psu.set_output_state(True)
@@ -42,8 +63,12 @@ try:
             # this could happen if the OCP kicked in
             break
 
-        sleep(1)
-except KeyboardInterrupt:
+        v_next = get_next_voltage(v)
+        if v_next is not None:
+            psu.set_voltage_setpoint(v_next)
+
+        sleep(0.25)
+except ( KeyboardInterrupt, StopIteration ):
     pass
 except SerialException:
     print('ERROR: The power supply appears to have gone away...', file=sys.stderr)
