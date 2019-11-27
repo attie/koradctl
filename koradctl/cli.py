@@ -1,7 +1,6 @@
 from koradctl.args import get_args
 from koradctl.port import get_port
 from koradctl.psu import PowerSupply
-
 from koradctl.test import TestSuite
 
 from time import sleep
@@ -9,6 +8,12 @@ from time import sleep
 class Cli:
     def __init__(self):
         self.args = get_args()
+
+        if self.args.show_version:
+            import koradctl as me
+            print('%s version %s' % ( me.__proj_name__, me.__version__ ))
+            exit(0)
+
         self.port = get_port(self.args.port, self.args.baudrate)
         self.psu = PowerSupply(self.port)
 

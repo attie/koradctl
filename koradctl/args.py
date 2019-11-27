@@ -22,6 +22,8 @@ def get_arg_parser():
     parser.add_argument('-M', '--monitor-loop',                  dest='monitor_loop',            action='store_true', default=False,          help='monitor the supply (forever)')
     parser.add_argument('-f', '--monitor-freq', type=float,      dest='monitor_freq',            action='store',      default=1,              help='frequency of monitor readings, in seconds')
 
+    parser.add_argument('-V', '--version',                       dest='show_version',            action='store_true', default=False,          help='show the version and quit')
+
     return parser
 
 def get_args():
