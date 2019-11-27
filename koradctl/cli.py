@@ -27,6 +27,18 @@ class Cli:
         if self.args.interactive:
             raise NotImplementedError()
 
+        if self.args.over_current_protection is not None:
+            self.psu.set_ocp_state(self.args.over_current_protection)
+            print('OCP:     request: %-5s' % (
+                'On' if self.args.over_current_protection else 'Off',
+            ))
+
+        if self.args.over_voltage_protection is not None:
+            self.psu.set_ocp_state(self.args.over_voltage_protection)
+            print('OVP:     request: %-5s' % (
+                'On' if self.args.over_voltage_protection else 'Off',
+            ))
+
         if self.args.voltage is not None:
             self.psu.set_voltage_setpoint(self.args.voltage)
             print('Voltage: request: %2.2f, result: %2.2f' % (

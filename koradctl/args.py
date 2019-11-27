@@ -11,6 +11,9 @@ def get_arg_parser():
     parser.add_argument('-I', '--interactive',                   dest='interactive',   action='store_true', default=False,          help='enable interactive mode')
     parser.add_argument('-t', '--test',                          dest='test',          action='store_true', default=False,          help='run the tests and quit')
 
+    parser.add_argument(      '--ocp',          type=human_bool, dest='over_current_protection', action='store', default=None,      help='set the over current protection')
+    parser.add_argument(      '--ovp',          type=human_bool, dest='over_voltage_protection', action='store', default=None,      help='set the over current protection')
+
     parser.add_argument('-v', '--voltage',      type=float,      dest='voltage',       action='store',      default=None,           help='set the voltage')
     parser.add_argument('-i', '--current',      type=float,      dest='current',       action='store',      default=None,           help='set the current')
     parser.add_argument('-e', '--enable',       type=human_bool, dest='output_enable', action='store',      default=None,           help='set the output enable')

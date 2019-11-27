@@ -22,6 +22,8 @@ python3 -m koradctl -e off
 # 12v, 400mA, Output on, Monitor with readings once every 10 seconds
 python3 -m koradctl -v 12 -i 0.4 -e on -M -f 10
 
+# 3.3v, 250mA, OCP on, OVP off, Output on, Monitor once
+python3 -m koradctl --ocp on --ovp off -v 3.3 -i 0.25 -e on -m
 ```
 
 ## Power Supply API
