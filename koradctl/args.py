@@ -4,6 +4,7 @@ from koradctl.types import human_bool
 
 def get_arg_parser():
     parser = argparse.ArgumentParser(
+        prog='koradctl',
         description='Korad Power Supply Controller',
     )
     parser.add_argument('-p', '--port',
