@@ -1,8 +1,7 @@
 from time import sleep
 from serial.serialutil import SerialException
 
-from koradctl.port import get_port
-from koradctl.psu import PowerSupply
+import koradctl
 
 """
 basic example script
@@ -11,8 +10,8 @@ basic example script
 - enable over-current protection after 250ms
 """
 
-port = get_port('/dev/ttyACM0')
-psu = PowerSupply(port)
+port = koradctl.get_port('/dev/ttyACM0')
+psu = koradctl.PowerSupply(port)
 
 # disable OCP / OVP
 psu.set_ocp_state(False)

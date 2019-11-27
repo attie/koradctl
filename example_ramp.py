@@ -1,8 +1,7 @@
 from time import sleep
 from serial.serialutil import SerialException
 
-from koradctl.port import get_port
-from koradctl.psu import PowerSupply
+import koradctl
 
 """
 more complex example script
@@ -32,8 +31,8 @@ def get_next_voltage(v_live):
         v_next = None
     return v_next
 
-port = get_port('/dev/ttyACM0')
-psu = PowerSupply(port)
+port = koradctl.get_port('/dev/ttyACM0')
+psu = koradctl.PowerSupply(port)
 
 # disable OCP / OVP
 psu.set_ocp_state(False)
