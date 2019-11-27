@@ -1,11 +1,11 @@
+import sys
+from time import sleep
+from serial.serialutil import SerialException
+
 from koradctl.args import get_args
 from koradctl.port import get_port
 from koradctl.psu import PowerSupply
 from koradctl.test import TestSuite
-
-import sys
-from time import sleep
-from serial.serialutil import SerialException
 
 class Cli:
     def __init__(self):
