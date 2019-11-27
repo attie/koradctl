@@ -12,7 +12,7 @@ long_description = '\n'.join((
     '',
     'koradctl has been tested with bench power supplies that respond '
     'with the following firmware identification:',
-    *[ '- %s' % _ for _ in tested_firmware ],
+    *[ '  - %s' % _ for _ in tested_firmware ],
     '',
     'Other supplies listed on the following page should also work:',
     '  https://sigrok.org/wiki/Korad_KAxxxxP_series',
