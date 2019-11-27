@@ -2,10 +2,19 @@
 
 from setuptools import setup
 
+import koradctl as me
+
+long_description = (
+    "koradctl is a simple command line utility and python library for "
+    "controlling Korad / Tenma power supplies via their RS232 or USB "
+    "interfaces."
+)
+
 setup(
-    name='koradctl',
-    version=0.1,
+    name=me.__proj_name__,
+    version=me.__version__,
     description='Control utility for Korad / Tenma power supplies',
+    long_description=long_description,
     author='Attie Grande',
     author_email='attie@attie.co.uk',
     url='https://github.com/attie/koradctl',
