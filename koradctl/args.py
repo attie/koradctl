@@ -1,5 +1,7 @@
 import argparse
 
+from koradctl.types import human_bool
+
 def get_arg_parser():
     parser = argparse.ArgumentParser(
         description='Korad Power Supply Controller',
@@ -29,6 +31,27 @@ def get_arg_parser():
         action='store_true',
         default=False,
         help='run the tests and quit',
+    )
+    parser.add_argument('-v', '--voltage',
+        type=float,
+        dest='voltage',
+        action='store',
+        default=None,
+        help='set the voltage',
+    )
+    parser.add_argument('-i', '--current',
+        type=float,
+        dest='current',
+        action='store',
+        default=None,
+        help='set the current',
+    )
+    parser.add_argument('-e', '--enable',
+        type=human_bool,
+        dest='output_enable',
+        action='store',
+        default=None,
+        help='set the output enable',
     )
     return parser
 
