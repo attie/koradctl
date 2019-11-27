@@ -3,7 +3,9 @@ from koradctl.port import get_port
 from koradctl.psu import PowerSupply
 from koradctl.test import TestSuite
 
+import sys
 from time import sleep
+from serial.serialutil import SerialException
 
 class Cli:
     def __init__(self):
@@ -14,7 +16,12 @@ class Cli:
             print('%s version %s' % ( me.__proj_name__, me.__version__ ))
             exit(0)
 
-        self.port = get_port(self.args.port, self.args.baudrate)
+        try:
+            self.port = get_port(self.args.port, self.args.baudrate)
+        except SerialException:
+            print('ERROR: Failed to connect to the power supply...', file=sys.stderr)
+            exit(0)
+
         self.psu = PowerSupply(self.port)
 
     def print_output_readings(self):
