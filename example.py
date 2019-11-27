@@ -21,10 +21,15 @@ psu.set_output_state(True)
 sleep(0.25)
 psu.set_ocp_state(True)
 
-# log power usage at ~1Hz
-while True:
-    v = psu.get_output_voltage().value
-    i = psu.get_output_current().value
-    p = psu.get_output_power().value
-    print('%2.2fv    %1.3fA    %2.2fW' % ( v, i, p ))
-    sleep(1)
+try:
+    # log power usage at ~1Hz
+    while True:
+        v = psu.get_output_voltage().value
+        i = psu.get_output_current().value
+        p = psu.get_output_power().value
+        print('%2.2fv    %1.3fA    %2.2fW' % ( v, i, p ))
+        sleep(1)
+except KeyboardInterrupt:
+    pass
+finally:
+    psu.set_output_state(False)
