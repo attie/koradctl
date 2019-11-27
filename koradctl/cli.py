@@ -32,13 +32,20 @@ class Cli:
 
     def run(self):
         if self.args.test:
-            t = TestSuite(self.psu)
-            t.run()
-            exit(0)
+            self.run_tests()
+        elif self.args.interactive:
+            self.run_interactive()
+        else:
+            self.run_noninteractive()
 
-        if self.args.interactive:
-            raise NotImplementedError()
+    def run_tests(self):
+        t = TestSuite(self.psu)
+        t.run()
 
+    def run_interactive(self):
+        raise NotImplementedError()
+
+    def run_noninteractive(self):
         if self.args.over_current_protection is not None:
             self.psu.set_ocp_state(self.args.over_current_protection)
             print('OCP:     request: %-5s' % (
