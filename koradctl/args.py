@@ -16,16 +16,19 @@ def get_arg_parser():
         dest='baudrate',
         action='store',
         default=9600,
+        help='the serial port baudrate',
     )
-    parser.add_argument('-i', '--interactive',
+    parser.add_argument('-I', '--interactive',
         dest='interactive',
         action='store_true',
         default=False,
+        help='enable interactive mode',
     )
     parser.add_argument('-t', '--test',
         dest='test',
         action='store_true',
         default=False,
+        help='run the tests and quit',
     )
     return parser
 
