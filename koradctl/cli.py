@@ -12,6 +12,12 @@ class Cli:
         self.port = get_port(self.args.port, self.args.baudrate)
         self.psu = PowerSupply(self.port)
 
+    def print_output_readings(self):
+        i, v, p = self.psu.get_output_readings()
+        print('Output: %1.3f A, %2.2f v, %2.2f W' % (
+            i.value, v.value, p.value
+        ))
+
     def run(self):
         if self.args.test:
             t = TestSuite(self.psu)
@@ -41,3 +47,11 @@ class Cli:
                 'On' if self.args.output_enable else 'Off',
                 'On' if self.psu.get_output_state() else 'Off',
             ))
+
+        if self.args.monitor or self.args.monitor_loop:
+            self.print_output_readings()
+
+        if self.args.monitor_loop:
+            while True:
+                sleep(self.args.monitor_freq)
+                self.print_output_readings()
