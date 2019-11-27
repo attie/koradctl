@@ -24,12 +24,6 @@ class Cli:
 
         self.psu = PowerSupply(self.port)
 
-    def print_output_readings(self):
-        i, v, p = self.psu.get_output_readings()
-        print('Output: %1.3f A, %2.2f v, %2.2f W' % (
-            i.value, v.value, p.value
-        ))
-
     def run(self):
         if self.args.test:
             self.run_tests()
@@ -86,3 +80,9 @@ class Cli:
             while True:
                 sleep(self.args.monitor_freq)
                 self.print_output_readings()
+
+    def print_output_readings(self):
+        i, v, p = self.psu.get_output_readings()
+        print('Output: %1.3f A, %2.2f v, %2.2f W' % (
+            i.value, v.value, p.value
+        ))
