@@ -1,4 +1,5 @@
 from time import sleep
+from serial.serialutil import SerialException
 
 from koradctl.port import get_port
 from koradctl.psu import PowerSupply
@@ -37,5 +38,7 @@ try:
         sleep(1)
 except KeyboardInterrupt:
     pass
+except SerialException:
+    print('ERROR: The power supply appears to have gone away...', file=sys.stderr)
 finally:
     psu.set_output_state(False)
