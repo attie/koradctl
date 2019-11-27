@@ -29,4 +29,20 @@ setup(
         ]
     },
     python_requires='>=3.5',
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: Manufacturing',
+        'Intended Audience :: Science/Research',
+        'Intended Audience :: System Administrators',
+        'License :: Freely Distributable',
+        'License :: OSI Approved :: BSD License',
+        'Natural Language :: English',
+        'Operating System :: POSIX',
+        'Operating System :: Unix',
+        'Programming Language :: Python',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Software Development :: Embedded Systems',
+        'Topic :: Utilities',
+    ],
 )
