@@ -28,6 +28,12 @@ try:
         i = psu.get_output_current().value
         p = psu.get_output_power().value
         print('%2.2fv    %1.3fA    %2.2fW' % ( v, i, p ))
+
+        if not psu.get_output_state():
+            # if the output is no longer enabled, then exit
+            # this could happen if the OCP kicked in
+            break
+
         sleep(1)
 except KeyboardInterrupt:
     pass
