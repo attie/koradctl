@@ -18,6 +18,7 @@ setup(
     author='Attie Grande',
     author_email='attie@attie.co.uk',
     url='https://github.com/attie/koradctl',
+    license='BSD-3-Clause',
     packages=[ 'koradctl' ],
     install_requires=[
         'pyserial',
