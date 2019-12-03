@@ -1,7 +1,7 @@
-def human_bool(arg: str):
-    true_values = [ '1', 'on', 'yes' ]
-    false_values = [ '0', 'off', 'no' ]
+true_values = [ '1', 'on', 'yes' ]
+false_values = [ '0', 'off', 'no' ]
 
+def human_bool(arg: str):
     if arg in true_values:
         return True
     if arg in false_values:
