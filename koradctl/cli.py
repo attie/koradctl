@@ -67,9 +67,14 @@ class Cli:
             ))
 
         if self.args.output_enable is not None:
-            self.psu.set_output_state(self.args.output_enable)
+            if self.args.output_enable == 'toggle':
+                new_state = not self.psu.get_output_state()
+            else:
+                new_state = self.args.output_enable
+
+            self.psu.set_output_state(new_state)
             print('Enable:  request: %-5s, result: %-5s' % (
-                'On' if self.args.output_enable else 'Off',
+                'On' if new_state else 'Off',
                 'On' if self.psu.get_output_state() else 'Off',
             ))
 
