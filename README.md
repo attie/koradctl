@@ -20,6 +20,9 @@ pip install koradctl
 # Output off
 koradctl -e off
 
+# Toggle the output
+koradctl -e toggle
+
 # 12v, 400mA, Output on, Monitor with readings once every 10 seconds
 koradctl -v 12 -i 0.4 -e on -M -f 10
 
