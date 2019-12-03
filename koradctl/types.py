@@ -2,20 +2,22 @@ true_values = [ '1', 'on', 'yes' ]
 false_values = [ '0', 'off', 'no' ]
 toggle_values = [ 't', 'toggle' ]
 
-def human_bool(arg: str):
-    if arg in true_values:
-        return True
-    if arg in false_values:
-        return False
+def from_options(arg: str, options: list):
+    for values, ret in options:
+        if arg in values:
+            return ret
 
-    raise TypeError('Must be a "human" boolean (one of: %s)' % ( [ *true_values, *false_values ] ))
+    raise TypeError('Must be one of: %s' % ( [ i for s in options for i in s[0] ] ))
+
+def human_bool(arg: str):
+    return from_options(arg, [
+        ( true_values,  True  ),
+        ( false_values, False ),
+    ])
 
 def human_bool_toggle(arg: str):
-    if arg in true_values:
-        return True
-    if arg in false_values:
-        return False
-    if arg in toggle_values:
-        return 'toggle'
-
-    raise TypeError('Must be a "human" boolean, or toggle (one of: %s)' % ( [ *true_values, *false_values, *toggle_values ]))
+    return from_options(arg, [
+        ( true_values,   True     ),
+        ( false_values,  False    ),
+        ( toggle_values, 'toggle' ),
+    ])
