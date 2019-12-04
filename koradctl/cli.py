@@ -12,8 +12,8 @@ class Cli:
         self.args = get_args()
 
         if self.args.show_version:
-            import koradctl as me
-            print('%s version %s' % ( me.__proj_name__, me.__version__ ))
+            import koradctl.package as me
+            print('%s version %s' % ( me.proj_name, me.version ))
             exit(0)
 
         try:
