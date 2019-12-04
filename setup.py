@@ -4,7 +4,6 @@ from setuptools import setup
 from m2r import convert
 
 import koradctl as me
-from koradctl.psu import tested_firmware
 
 with open('./README.md', 'r', encoding='utf-8') as f:
     long_description = convert(f.read())
