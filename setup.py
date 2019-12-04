@@ -27,7 +27,7 @@ setup(
             'koradctl = koradctl.__main__:cli',
         ]
     },
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
