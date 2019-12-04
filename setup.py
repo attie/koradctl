@@ -1,17 +1,45 @@
 #!/usr/bin/env python
 
+import re
 from setuptools import setup
 
-import koradctl.package as me
+class PackageMeta:
+    def __init__(self):
+        self.load_long_description()
+        self.load_package_info()
 
-with open('./README.md', 'r', encoding='utf-8') as f:
-    long_description = f.read()
+    def read_file(self, filename: str) -> str:
+        with open(filename, 'r', encoding='utf-8') as f:
+            return f.read()
+
+    def load_long_description(self):
+        self.long_description = self.read_file('./README.md')
+
+    def load_package_info(self):
+        f = self.read_file('./koradctl/package.py')
+        d = {}
+
+        for line in f.split('\n'):
+            # match all top level assignments (no indentation)
+            match = re.search(r'^(?P<k>[^ =]+) *= *[\'"](?P<v>.+)[\'"] *$', line, re.M)
+
+            if match is None:
+                continue
+
+            match = match.groupdict()
+
+            k, v = match['k'], match['v']
+            d[k] = v
+
+        self.package_info = d
+
+m = PackageMeta()
 
 setup(
-    name=me.proj_name,
-    version=me.version,
+    name=m.package_info['proj_name'],
+    version=m.package_info['version'],
     description='Control utility for Korad / Tenma power supplies',
-    long_description=long_description,
+    long_description=m.long_description,
     long_description_content_type='text/markdown',
     author='Attie Grande',
     author_email='attie@attie.co.uk',
