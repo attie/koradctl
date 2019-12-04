@@ -27,10 +27,8 @@ def get_next_voltage(v_live):
 
     if v_live < V_END:
         v_next = v_live + V_STEP
-    elif v_live > V_END:
-        v_next = v_live - V_STEP
     else:
-        v_next = None
+        v_next = v_live - V_STEP
     return v_next
 
 port = koradctl.get_port('/dev/ttyACM0')
