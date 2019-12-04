@@ -1,6 +1,6 @@
 import serial
 
-def get_port(port, baudrate=9600):
+def get_port(port: str, baudrate: int = 9600) -> serial.Serial:
     return serial.Serial(
         port=port,
         baudrate=baudrate,

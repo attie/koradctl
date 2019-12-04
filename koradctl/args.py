@@ -3,7 +3,7 @@ import argparse
 from koradctl.types import human_bool
 from koradctl.types import human_bool_toggle
 
-def get_arg_parser():
+def get_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog='koradctl', description='Korad Power Supply Controller')
 
     parser.add_argument('-p', '--port',         type=str,               dest='port',                    action='store',      default='/dev/ttyACM0', help='the serial port to use')
@@ -27,6 +27,6 @@ def get_arg_parser():
 
     return parser
 
-def get_args():
+def get_args() -> argparse.Namespace:
     parser = get_arg_parser()
     return parser.parse_args()

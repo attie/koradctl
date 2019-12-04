@@ -31,7 +31,7 @@ class TestSuite:
     def __init__(self, psu):
         self.psu = psu
 
-    def check_vi_in_range(self, v, i):
+    def check_vi_in_range(self, v: float, i: float):
         v_live = self.psu.get_output_voltage()
         assert(v_live.value > (v * self.TEST_VOLTAGE_TOLERANCE_DN))
         assert(v_live.value < (v * self.TEST_VOLTAGE_TOLERANCE_UP))
