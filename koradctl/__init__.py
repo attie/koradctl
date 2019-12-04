@@ -1,5 +1,5 @@
 __proj_name__ = 'koradctl'
-__version__ = '0.3'
+__version__ = '0.4'
 
 from koradctl.port import get_port
 from koradctl.psu import PowerSupply
