@@ -2,14 +2,14 @@
 
 from setuptools import setup
 
-import koradctl as me
+import koradctl.package as me
 
 with open('./README.md', 'r', encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name=me.__proj_name__,
-    version=me.__version__,
+    name=me.proj_name,
+    version=me.version,
     description='Control utility for Korad / Tenma power supplies',
     long_description=long_description,
     long_description_content_type='text/markdown',
