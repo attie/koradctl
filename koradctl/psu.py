@@ -16,24 +16,33 @@ class PowerSupply:
         self.port = port
 
     """
-    this function is really for internal use... you shouldn't need
-    to call it
+    this function is really for internal use... you shouldn't need to call it
+    it will encode the command (if necessary), and then wait for a response
+    of up to max_response_size. this is useful for commands that expect a
+    binary response
     """
     def issue_command(self, command, max_response_size=1000):
         if isinstance(command, str):
             command = command.encode('ascii')
 
         self.port.write(command)
-        response = self.port.read(max_response_size)
+        return self.port.read(max_response_size)
 
-        return response.rstrip(b'\x00')
-
+    """
+    this function is really for internal use... you shouldn't need to call it
+    it will call issue_command(), and then trim the response by removing any
+    trim_chars from the right-hand side. this is useful for commands that
+    expect an ASCII response, as sometimes trailing NULs are received
+    """
+    def issue_command_trim(self, command, max_response_size=1000, trim_chars=b'\x00'):
+        response = self.issue_command(command, max_response_size)
+        return response.rstrip(trim_chars)
 
     """
     get the power supply's identity string, e.g: "TENMA 72-2540 V2.1"
     """
     def get_identity(self):
-        return self.issue_command('*IDN?').decode('ascii')
+        return self.issue_command_trim('*IDN?').decode('ascii')
 
     """
     check whether the connected power supply has been tested against
@@ -69,7 +78,7 @@ class PowerSupply:
 
 
     def get_voltage_setpoint(self):
-        response = self.issue_command('VSET1?')
+        response = self.issue_command_trim('VSET1?')
         return pretty_reading(response, 'V')
 
     def set_voltage_setpoint(self, voltage: float):
@@ -77,7 +86,7 @@ class PowerSupply:
 
 
     def get_current_setpoint(self):
-        response = self.issue_command('ISET1?')
+        response = self.issue_command_trim('ISET1?')
         return pretty_reading(response, 'I')
 
     def set_current_setpoint(self, current: float):
@@ -85,11 +94,11 @@ class PowerSupply:
 
 
     def get_output_voltage(self):
-        response = self.issue_command('VOUT1?')
+        response = self.issue_command_trim('VOUT1?')
         return pretty_reading(response, 'V')
 
     def get_output_current(self):
-        response = self.issue_command('IOUT1?')
+        response = self.issue_command_trim('IOUT1?')
         return pretty_reading(response, 'I')
 
     def get_output_readings(self):
