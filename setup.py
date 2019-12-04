@@ -20,6 +20,7 @@ setup(
     license='BSD-3-Clause',
     packages=[ 'koradctl' ],
     install_requires=[
+        'm2r',
         'pyserial',
     ],
     entry_points={
