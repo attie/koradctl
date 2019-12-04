@@ -47,7 +47,7 @@ class Cli:
             ))
 
         if self.args.over_voltage_protection is not None:
-            self.psu.set_ocp_state(self.args.over_voltage_protection)
+            self.psu.set_ovp_state(self.args.over_voltage_protection)
             print('OVP:     request: %-5s' % (
                 'On' if self.args.over_voltage_protection else 'Off',
             ))
