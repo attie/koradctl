@@ -1,26 +1,24 @@
 #!/usr/bin/env python
 
 from setuptools import setup
-from m2r import convert
 
 import koradctl as me
 
 with open('./README.md', 'r', encoding='utf-8') as f:
-    long_description = convert(f.read())
+    long_description = f.read()
 
 setup(
     name=me.__proj_name__,
     version=me.__version__,
     description='Control utility for Korad / Tenma power supplies',
     long_description=long_description,
-    long_description_content_type='text/x-rst',
+    long_description_content_type='text/markdown',
     author='Attie Grande',
     author_email='attie@attie.co.uk',
     url='https://github.com/attie/koradctl',
     license='BSD-3-Clause',
     packages=[ 'koradctl' ],
     install_requires=[
-        'm2r',
         'pyserial',
     ],
     entry_points={
