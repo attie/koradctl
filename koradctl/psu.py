@@ -105,11 +105,12 @@ class PowerSupply:
         response = self.issue_command_trim('IOUT1?')
         return pretty_reading(response, 'I')
 
+    def get_output_power(self) -> Reading:
+        return self.get_output_readings()[2]
+
+
     def get_output_readings(self) -> Tuple[Reading, Reading, Reading]:
         i = self.get_output_current()
         v = self.get_output_voltage()
         p = pretty_reading(i.value * v.value, 'W')
         return i, v, p
-
-    def get_output_power(self) -> Reading:
-        return self.get_output_readings()[2]
