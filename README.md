@@ -29,6 +29,9 @@ koradctl -v 12 -i 0.4 -e on -M -f 10
 # 3.3v, 250mA, OCP on, OVP off, Output on, Monitor once
 koradctl --ocp on --ovp off -v 3.3 -i 0.25 -e on -m
 
+# 5v, 150mA, Output on, Monitor with default interval, Turn output off on ^C
+koradctl -v 5 -i 0.15 -e on -M -o
+
 # further usage information:
 koradctl --help
 ```
