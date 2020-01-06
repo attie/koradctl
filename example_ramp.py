@@ -60,7 +60,7 @@ try:
             # this could happen if the OCP kicked in
             break
 
-        v_next = get_next_voltage(v)
+        v_next = get_next_voltage(v.value)
         if v_next is not None:
             psu.set_voltage_setpoint(v_next)
 
