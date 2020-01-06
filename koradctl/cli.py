@@ -82,9 +82,19 @@ class Cli:
             self.print_output_readings()
 
         if self.args.monitor_loop:
-            while True:
-                sleep(self.args.monitor_freq)
-                self.print_output_readings()
+            try:
+                while True:
+                    sleep(self.args.monitor_freq)
+                    self.print_output_readings()
+            except KeyboardInterrupt:
+                print('') # this puts the terminal's ^C on a line by itself
+
+        if self.args.off_on_exit:
+            self.psu.set_output_state(False)
+            print('Enable:  request: %-5s, result: %-5s' % (
+                'Off',
+                'On' if self.psu.get_output_state() else 'Off',
+            ))
 
     def print_output_readings(self):
         i, v, p = self.psu.get_output_readings()
