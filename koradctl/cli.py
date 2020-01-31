@@ -40,6 +40,9 @@ class Cli:
         raise NotImplementedError()
 
     def run_noninteractive(self):
+        if not self.psu.is_tested():
+            print('WARNING: this power supply is not fully tested', file=sys.stderr)
+
         if self.args.over_current_protection is not None:
             self.psu.set_ocp_state(self.args.over_current_protection)
             print('OCP:     request: %-5s' % (
