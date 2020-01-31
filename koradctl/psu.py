@@ -19,42 +19,42 @@ class PowerSupply:
     def __init__(self, port: Serial):
         self.port = port
 
-    """
-    this function is really for internal use... you shouldn't need to call it
-    it will encode the command (if necessary), and then wait for a response
-    of up to max_response_size. this is useful for commands that expect a
-    binary response
-    """
     def issue_command(self, command: Union[bytes, str], max_response_size: int = 1000) -> bytes:
+        """
+        this function is really for internal use... you shouldn't need to call it
+        it will encode the command (if necessary), and then wait for a response
+        of up to max_response_size. this is useful for commands that expect a
+        binary response
+        """
         if isinstance(command, str):
             command = command.encode('ascii')
 
         self.port.write(command)
         return self.port.read(max_response_size)
 
-    """
-    this function is really for internal use... you shouldn't need to call it
-    it will call issue_command(), and then trim the response by removing any
-    trim_chars from the right-hand side. this is useful for commands that
-    expect an ASCII response, as sometimes trailing NULs are received
-    """
     def issue_command_trim(self, command: Union[bytes, str], max_response_size: int = 1000, trim_chars: bytes = b'\x00') -> bytes:
+        """
+        this function is really for internal use... you shouldn't need to call it
+        it will call issue_command(), and then trim the response by removing any
+        trim_chars from the right-hand side. this is useful for commands that
+        expect an ASCII response, as sometimes trailing NULs are received
+        """
         response = self.issue_command(command, max_response_size)
         return response.rstrip(trim_chars)
 
-    """
-    get the power supply's identity string, e.g: "TENMA 72-2540 V2.1"
-    """
     def get_identity(self) -> str:
+        """
+        get the power supply's identity string, e.g: "TENMA 72-2540 V2.1"
+        """
         return self.issue_command_trim('*IDN?').decode('ascii')
 
-    """
-    check whether the connected power supply has been tested against
-    this codebase... when adding new power supplies, please check
-    all commands and responses before adding to the tested_firmware
-    list
-    """
     def is_tested(self) -> bool:
+        """
+        check whether the connected power supply has been tested against
+        this codebase... when adding new power supplies, please check
+        all commands and responses before adding to the tested_firmware
+        list
+        """
         identity = self.get_identity()
         return identity in tested_firmware
 
