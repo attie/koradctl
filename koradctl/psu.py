@@ -41,7 +41,7 @@ class PowerSupply:
 
         sleep(time_until_next_command)
 
-    def issue_command(self, command: Union[bytes, str], max_response_size: int = 1000) -> bytes:
+    def issue_command(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True) -> bytes:
         """
         this function is really for internal use... you shouldn't need to call it
         it will encode the command (if necessary), and then wait for a response
@@ -54,16 +54,24 @@ class PowerSupply:
         self.insert_command_delay()
 
         self.port.write(command)
+
+        if not wait_for_response:
+            return None
+
         return self.port.read(max_response_size)
 
-    def issue_command_trim(self, command: Union[bytes, str], max_response_size: int = 1000, trim_chars: bytes = b'\x00') -> bytes:
+    def issue_command_trim(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True, trim_chars: bytes = b'\x00') -> bytes:
         """
         this function is really for internal use... you shouldn't need to call it
         it will call issue_command(), and then trim the response by removing any
         trim_chars from the right-hand side. this is useful for commands that
         expect an ASCII response, as sometimes trailing NULs are received
         """
-        response = self.issue_command(command, max_response_size)
+        response = self.issue_command(command, max_response_size, wait_for_response)
+
+        if response is None:
+            return None
+
         return response.rstrip(trim_chars)
 
     def get_identity(self) -> str:
@@ -92,17 +100,17 @@ class PowerSupply:
         return self.get_status().output_enabled
 
     def set_output_state(self, enabled: bool):
-        self.issue_command('OUT1' if enabled else 'OUT0')
+        self.issue_command('OUT1' if enabled else 'OUT0', wait_for_response=False)
 
 
     def get_ovp_ocp_state(self) -> bool:
         return self.get_status().ovp_ocp_enabled
 
     def set_ocp_state(self, enabled: bool):
-        self.issue_command('OCP1' if enabled else 'OCP0')
+        self.issue_command('OCP1' if enabled else 'OCP0', wait_for_response=False)
 
     def set_ovp_state(self, enabled: bool):
-        self.issue_command('OVP1' if enabled else 'OVP0')
+        self.issue_command('OVP1' if enabled else 'OVP0', wait_for_response=False)
 
 
     def get_voltage_setpoint(self) -> Reading:
@@ -110,7 +118,7 @@ class PowerSupply:
         return pretty_reading(response, 'V')
 
     def set_voltage_setpoint(self, voltage: float):
-        self.issue_command('VSET1:%2.2f' % ( voltage ))
+        self.issue_command('VSET1:%2.2f' % ( voltage ), wait_for_response=False)
 
 
     def get_current_setpoint(self) -> Reading:
@@ -118,7 +126,7 @@ class PowerSupply:
         return pretty_reading(response, 'I')
 
     def set_current_setpoint(self, current: float):
-        self.issue_command('ISET1:%1.3f' % ( current ))
+        self.issue_command('ISET1:%1.3f' % ( current ), wait_for_response=False)
 
 
     def get_output_voltage(self) -> Reading:
