@@ -1,3 +1,5 @@
+from time import sleep
+from datetime import datetime
 from typing import Union, Tuple
 from serial import Serial
 
@@ -11,13 +13,33 @@ from koradctl.pretty import Status, Reading
 # in the status byte, where bit 7 (0x80) indicates the "OVP and/or
 # OCP status", instead of bit 5 (0x20)...
 
+# it is important that commands aren't issued too quickly... instead
+# we impose a gap of at least ~50ms between commands
+INTER_COMMAND_DELAY = 0.05
+
 tested_firmware = [
     'TENMA 72-2540 V2.1',
 ]
 
 class PowerSupply:
     def __init__(self, port: Serial):
+        self.last_command = None
         self.port = port
+
+    def insert_command_delay(self):
+        last_command = self.last_command
+        self.last_command = datetime.now()
+
+        if last_command is None:
+            return
+
+        time_since_last_command = ( datetime.now() - last_command ).total_seconds()
+        time_until_next_command = INTER_COMMAND_DELAY - time_since_last_command
+
+        if time_until_next_command < 0:
+            return
+
+        sleep(time_until_next_command)
 
     def issue_command(self, command: Union[bytes, str], max_response_size: int = 1000) -> bytes:
         """
@@ -28,6 +50,8 @@ class PowerSupply:
         """
         if isinstance(command, str):
             command = command.encode('ascii')
+
+        self.insert_command_delay()
 
         self.port.write(command)
         return self.port.read(max_response_size)
