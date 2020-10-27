@@ -41,7 +41,7 @@ class PowerSupply:
 
         sleep(time_until_next_command)
 
-    def issue_command(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True) -> bytes:
+    def issue_command(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True, allow_retry: bool = False) -> bytes:
         """
         this function is really for internal use... you shouldn't need to call it
         it will encode the command (if necessary), and then wait for a response
@@ -58,16 +58,24 @@ class PowerSupply:
         if not wait_for_response:
             return None
 
-        return self.port.read(max_response_size)
+        for i in range(10 if allow_retry else 1):
+            response = self.port.read(max_response_size)
+            if len(response) != 0:
+                break
 
-    def issue_command_trim(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True, trim_chars: bytes = b'\x00') -> bytes:
+            # retry issuing the command
+            self.port.write(command)
+
+        return response
+
+    def issue_command_trim(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True, allow_retry: bool = False, trim_chars: bytes = b'\x00') -> bytes:
         """
         this function is really for internal use... you shouldn't need to call it
         it will call issue_command(), and then trim the response by removing any
         trim_chars from the right-hand side. this is useful for commands that
         expect an ASCII response, as sometimes trailing NULs are received
         """
-        response = self.issue_command(command, max_response_size, wait_for_response)
+        response = self.issue_command(command, max_response_size, wait_for_response, allow_retry)
 
         if response is None:
             return None
@@ -78,7 +86,7 @@ class PowerSupply:
         """
         get the power supply's identity string, e.g: "TENMA 72-2540 V2.1"
         """
-        return self.issue_command_trim('*IDN?').decode('ascii')
+        return self.issue_command_trim('*IDN?', allow_retry=True).decode('ascii')
 
     def is_tested(self) -> bool:
         """
@@ -92,7 +100,7 @@ class PowerSupply:
 
 
     def get_status(self) -> Status:
-        response = self.issue_command('STATUS?')
+        response = self.issue_command('STATUS?', allow_retry=True)
         return pretty_status(response)
 
 
@@ -114,7 +122,7 @@ class PowerSupply:
 
 
     def get_voltage_setpoint(self) -> Reading:
-        response = self.issue_command_trim('VSET1?')
+        response = self.issue_command_trim('VSET1?', allow_retry=True)
         return pretty_reading(response, 'V')
 
     def set_voltage_setpoint(self, voltage: float):
@@ -122,7 +130,7 @@ class PowerSupply:
 
 
     def get_current_setpoint(self) -> Reading:
-        response = self.issue_command_trim('ISET1?')
+        response = self.issue_command_trim('ISET1?', allow_retry=True)
         return pretty_reading(response, 'I')
 
     def set_current_setpoint(self, current: float):
@@ -130,11 +138,11 @@ class PowerSupply:
 
 
     def get_output_voltage(self) -> Reading:
-        response = self.issue_command_trim('VOUT1?')
+        response = self.issue_command_trim('VOUT1?', allow_retry=True)
         return pretty_reading(response, 'V')
 
     def get_output_current(self) -> Reading:
-        response = self.issue_command_trim('IOUT1?')
+        response = self.issue_command_trim('IOUT1?', allow_retry=True)
         return pretty_reading(response, 'I')
 
     def get_output_power(self) -> Reading:
