@@ -69,3 +69,10 @@ virtualenv -p python3 venv
 . venv/bin/activate
 pip install -r requirements.txt
 ```
+
+## Todo
+
+- Local configuration file
+    - Default Voltage / Current setpoint
+    - Voltage / Current limits
+    - Monitor interval
