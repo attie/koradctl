@@ -100,7 +100,7 @@ class Cli:
             ))
 
     def print_output_readings(self):
-        i, v, p = self.psu.get_output_readings()
+        v, i, p = self.psu.get_output_readings()
         print('Output: %1.3f A, %2.2f v, %2.2f W' % (
             i.value, v.value, p.value
         ))

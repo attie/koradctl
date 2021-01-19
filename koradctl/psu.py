@@ -150,7 +150,7 @@ class PowerSupply:
 
 
     def get_output_readings(self) -> Tuple[Reading, Reading, Reading]:
-        i = self.get_output_current()
         v = self.get_output_voltage()
+        i = self.get_output_current()
         p = pretty_reading(i.value * v.value, 'W')
-        return i, v, p
+        return v, i, p

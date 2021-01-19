@@ -52,7 +52,7 @@ psu.set_ocp_state(True)
 try:
     # log power usage at ~1Hz
     while True:
-        i, v, p = psu.get_output_readings()
+        v, i, p = psu.get_output_readings()
         print('%2.2fv    %1.3fA    %2.2fW' % ( v.value, i.value, p.value ))
 
         if not psu.get_output_state():
