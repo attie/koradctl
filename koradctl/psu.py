@@ -1,3 +1,6 @@
+
+import re
+
 from time import sleep
 from datetime import datetime
 from typing import Union, Tuple
@@ -17,8 +20,13 @@ from koradctl.pretty import Status, Reading
 # we impose a gap of at least ~50ms between commands
 INTER_COMMAND_DELAY = 0.05
 
+# Firmwares that have been tested with this library.
+#
+# Before adding a new firmware here, run `test.py` against it to make sure that it is
+# fully supported.
 tested_firmware = [
     'TENMA 72-2540 V2.1',
+    re.compile(r'^TENMA 72-2540 V5.8 SN:(\d+)$'),
 ]
 
 class PowerSupply:
@@ -96,7 +104,17 @@ class PowerSupply:
         list
         """
         identity = self.get_identity()
-        return identity in tested_firmware
+        for version in tested_firmware:
+            if isinstance(version, re.Pattern):
+                if version.fullmatch(identity):
+                    return True
+            elif isinstance(version, str):
+                if version == identity:
+                    return True
+            else:
+                raise ValueError("Unsupported type in 'tested_firmware'.")
+
+        return False
 
 
     def get_status(self) -> Status:
