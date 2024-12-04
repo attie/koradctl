@@ -27,6 +27,13 @@ class Cli:
     def run(self):
         if self.args.test:
             self.run_tests()
+        elif self.args.identify:
+            print(f"Device identity: {self.psu.get_identity()}")
+
+            serial = self.psu.get_serial_number()
+            if serial is not None:
+                print(f"Serial Number: {serial}")
+
         elif self.args.interactive:
             self.run_interactive()
         else:

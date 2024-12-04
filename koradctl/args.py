@@ -11,6 +11,7 @@ def get_arg_parser() -> argparse.ArgumentParser:
 
     parser.add_argument('-I', '--interactive',                          dest='interactive',             action='store_true', default=False,          help='enable interactive mode')
     parser.add_argument('-t', '--test',                                 dest='test',                    action='store_true', default=False,          help='run the tests and quit')
+    parser.add_argument('-d', '--identify',                             dest='identify',                action='store_true', default=False,          help='show the identity and quit')
 
     parser.add_argument(      '--ocp',          type=human_bool,        dest='over_current_protection', action='store',      default=None,           help='set the over current protection')
     parser.add_argument(      '--ovp',          type=human_bool,        dest='over_voltage_protection', action='store',      default=None,           help='set the over current protection')
