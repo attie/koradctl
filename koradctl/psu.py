@@ -24,9 +24,12 @@ INTER_COMMAND_DELAY = 0.05
 #
 # Before adding a new firmware here, run `test.py` against it to make sure that it is
 # fully supported.
+#
+# If the power supply reports a serial number in its answer to `get_identity`, capture
+# it is a regex group so that `get_serial_number` can return it.
 tested_firmware = [
     'TENMA 72-2540 V2.1',
-    re.compile(r'^TENMA 72-2540 V5.8 SN:(\d+)$'),
+    re.compile(r'^TENMA 72-2540 V5.8 SN:(?P<serial_number>\d+)$'),
 ]
 
 class PowerSupply:
@@ -95,6 +98,20 @@ class PowerSupply:
         get the power supply's identity string, e.g: "TENMA 72-2540 V2.1"
         """
         return self.issue_command_trim('*IDN?', allow_retry=True).decode('ascii')
+
+    def get_serial_number(self) -> str | None:
+        """
+        get the power supply's serial number if possible, otherwise return None.
+        """
+
+        identity = self.get_identity()
+        for version in tested_firmware:
+            # We can only extract the serial number if the version is a regex.
+            if isinstance(version, re.Pattern):
+                if match := version.fullmatch(identity):
+                    return match.group('serial_number')
+
+        return None
 
     def is_tested(self) -> bool:
         """
