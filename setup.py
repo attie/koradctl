@@ -46,6 +46,7 @@ setup(
     url='https://github.com/attie/koradctl',
     license='BSD-3-Clause',
     packages=[ 'koradctl' ],
+    package_data={m.package_info['proj_name']: ["py.typed"]},
     install_requires=[
         'pyserial',
     ],
