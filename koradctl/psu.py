@@ -52,7 +52,7 @@ class PowerSupply:
 
         sleep(time_until_next_command)
 
-    def issue_command(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True, allow_retry: bool = False) -> bytes:
+    def issue_command(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True, allow_retry: bool = False) -> Union[bytes, None]:
         """
         this function is really for internal use... you shouldn't need to call it
         it will encode the command (if necessary), and then wait for a response
@@ -79,7 +79,7 @@ class PowerSupply:
 
         return response
 
-    def issue_command_trim(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True, allow_retry: bool = False, trim_chars: bytes = b'\x00') -> bytes:
+    def issue_command_trim(self, command: Union[bytes, str], max_response_size: int = 1000, wait_for_response: bool = True, allow_retry: bool = False, trim_chars: bytes = b'\x00') -> Union[bytes, None]:
         """
         this function is really for internal use... you shouldn't need to call it
         it will call issue_command(), and then trim the response by removing any
@@ -97,7 +97,11 @@ class PowerSupply:
         """
         get the power supply's identity string, e.g: "TENMA 72-2540 V2.1"
         """
-        return self.issue_command_trim('*IDN?', allow_retry=True).decode('ascii')
+        response = self.issue_command_trim('*IDN?', allow_retry=True)
+        if response is None:
+            raise RuntimeError("Powersupply failed to answer command.")
+
+        return response.decode('ascii')
 
     def get_serial_number(self) -> str | None:
         """
@@ -136,8 +140,10 @@ class PowerSupply:
 
     def get_status(self) -> Status:
         response = self.issue_command('STATUS?', allow_retry=True)
-        return pretty_status(response)
+        if response is None:
+            raise RuntimeError("Powersupply failed to answer command.")
 
+        return pretty_status(response)
 
     def get_output_state(self) -> bool:
         return self.get_status().output_enabled
@@ -158,6 +164,9 @@ class PowerSupply:
 
     def get_voltage_setpoint(self) -> Reading:
         response = self.issue_command_trim('VSET1?', allow_retry=True)
+        if response is None:
+            raise RuntimeError("Powersupply failed to answer command.")
+
         return pretty_reading(response, 'V')
 
     def set_voltage_setpoint(self, voltage: float):
@@ -166,6 +175,9 @@ class PowerSupply:
 
     def get_current_setpoint(self) -> Reading:
         response = self.issue_command_trim('ISET1?', allow_retry=True)
+        if response is None:
+            raise RuntimeError("Powersupply failed to answer command.")
+
         return pretty_reading(response, 'I')
 
     def set_current_setpoint(self, current: float):
@@ -174,10 +186,16 @@ class PowerSupply:
 
     def get_output_voltage(self) -> Reading:
         response = self.issue_command_trim('VOUT1?', allow_retry=True)
+        if response is None:
+            raise RuntimeError("Powersupply failed to answer command.")
+
         return pretty_reading(response, 'V')
 
     def get_output_current(self) -> Reading:
         response = self.issue_command_trim('IOUT1?', allow_retry=True)
+        if response is None:
+            raise RuntimeError("Powersupply failed to answer command.")
+
         return pretty_reading(response, 'I')
 
     def get_output_power(self) -> Reading:

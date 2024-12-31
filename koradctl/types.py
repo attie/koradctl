@@ -1,10 +1,10 @@
-from typing import Union, List, Tuple
+from typing import Any, Union, List, Tuple
 
 true_values = [ '1', 'on', 'yes' ]
 false_values = [ '0', 'off', 'no' ]
 toggle_values = [ 't', 'toggle' ]
 
-def from_options(arg: str, options: List[Tuple[List[str], bool]]):
+def from_options(arg: str, options: List[Tuple[List[str], Any]]):
     for values, ret in options:
         if arg in values:
             return ret
