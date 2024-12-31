@@ -1,26 +1,34 @@
+from __future__ import annotations
+
 from typing import Union
-from collections import namedtuple
+from typing import NamedTuple
 
-status_fields = {
-    'output_enabled':  lambda x: bool( x & 0x40),
-    'ovp_ocp_enabled': lambda x: bool( x & 0x80),
-    'cv_active':       lambda x: bool( x & 0x01),
-    'cc_active':       lambda x: bool(~x & 0x01),
-}
-Status = namedtuple('Status', status_fields.keys())
+class Status(NamedTuple):
+    output_enabled: bool
+    ovp_ocp_enabled: bool
+    cv_active: bool
+    cc_active: bool
 
-def pretty_status(response: bytes):
+    @staticmethod
+    def from_status_byte(status_byte: int) -> Status:
+        assert 0 <= status_byte <= 255
+        return Status(
+            output_enabled=bool(status_byte & 0x40),
+            ovp_ocp_enabled=bool(status_byte & 0x80),
+            cv_active=bool(status_byte & 0x01),
+            cc_active=bool(~status_byte & 0x01),
+        )
+
+def pretty_status(response: bytes) -> Status:
     status_byte = response[0]
-    d = { k: fn(status_byte) for k,fn in status_fields.items() }
-    return Status(**d)
+    return Status.from_status_byte(status_byte)
 
-
-reading_fields = {
-    'value': lambda x,y: round(float(x), 3),
-    'units': lambda x,y: y,
-}
-Reading = namedtuple('Reading', reading_fields.keys())
+class Reading(NamedTuple):
+    value: float
+    units: str
 
 def pretty_reading(response: Union[bytes, float], units: str = '?'):
-    d = { k: fn(response, units) for k,fn in reading_fields.items() }
-    return Reading(**d)
+    return Reading(
+        value = round(float(response), 3),
+        units = units
+    )
