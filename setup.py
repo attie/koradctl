@@ -62,8 +62,6 @@ setup(
         'Intended Audience :: Manufacturing',
         'Intended Audience :: Science/Research',
         'Intended Audience :: System Administrators',
-        'License :: Freely Distributable',
-        'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Operating System :: POSIX',
         'Operating System :: Unix',
